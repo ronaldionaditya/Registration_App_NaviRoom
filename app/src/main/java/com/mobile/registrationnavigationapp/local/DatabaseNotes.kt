@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = arrayOf(Notes::class), version = 1)
+@Database(entities = arrayOf(Notes::class), version = 3)
 abstract class DatabaseNotes : RoomDatabase() {
     abstract fun notesDao(): DaoNotes
 

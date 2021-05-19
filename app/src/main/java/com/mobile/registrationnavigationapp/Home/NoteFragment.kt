@@ -17,7 +17,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_form_note.view.*
 import kotlinx.android.synthetic.main.fragment_note.*
-import kotlinx.android.synthetic.main.item_note.view.*
+import kotlinx.android.synthetic.main.item_note.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,7 +55,7 @@ class NoteFragment : Fragment() {
         view.btnSave.setOnClickListener {
 
             if (view.etNote.text.toString().isNotEmpty()){
-                addNote(Notes(null, view.etNote.text.toString(), getDate()))
+                addNote(Notes(null, view.etNote.text.toString(), false , getDate()))
             }else{
                 view.etNote.error = "Note harus diisi"
             }
@@ -67,6 +67,7 @@ class NoteFragment : Fragment() {
         dialogView?.show()
     }
 
+
     private fun showUpdateDialog(item: Notes?){
         val dialog = AlertDialog.Builder(context)
         val view = layoutInflater.inflate(R.layout.dialog_form_note, null)
@@ -77,12 +78,11 @@ class NoteFragment : Fragment() {
         view.btnSave.setOnClickListener {
 
             if (view.etNote.text.toString().isNotEmpty()){
-                updateNote(Notes(item?.id, view.etNote.text.toString(), getDate()))
+                updateNote(Notes(item?.id, view.etNote.text.toString(), item?.favorite ?: false, getDate()))
             }else{
                 view.etNote.error = "Note harus diisi"
             }
         }
-
 
         view.btnClose.setOnClickListener {
             dialogView?.dismiss()
@@ -100,7 +100,6 @@ class NoteFragment : Fragment() {
         return formatDate
     }
 
-
     private fun showNote() {
         Observable.fromCallable { noteDatabase?.notesDao()?.getAll() }
             .subscribeOn(Schedulers.io())
@@ -109,6 +108,15 @@ class NoteFragment : Fragment() {
                        listNote.adapter = NoteAdapter(it,object : NoteAdapter.OnClickListener{
                            override fun update(item: Notes?) {
                                showUpdateDialog(item)
+                           }
+
+                           override fun updateFav(item: Notes?) {
+                               if (item?.favorite == true){
+                                   updateNote(Notes(item.id, item.note, false, item.date))
+                               } else {
+                                   updateNote(Notes(item?.id, item?.note, true, item?.date))
+                               }
+
                            }
 
                            override fun delete(item: Notes?) {
@@ -130,6 +138,7 @@ class NoteFragment : Fragment() {
                            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
             })
     }
+
 
     private fun addNote(item: Notes){
         Observable.fromCallable { noteDatabase?.notesDao()?.insert(item) }
@@ -169,6 +178,4 @@ class NoteFragment : Fragment() {
                 Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
             })
     }
-
-
 }

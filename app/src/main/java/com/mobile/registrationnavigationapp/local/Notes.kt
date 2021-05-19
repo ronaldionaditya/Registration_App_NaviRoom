@@ -16,8 +16,10 @@ data class Notes(
     @ColumnInfo(name = "note")
     var note: String? = null,
 
+    @ColumnInfo(name = "favorite")
+    var favorite: Boolean = false,
+
     @ColumnInfo(name = "date")
     var date: String? = null
-
 
 )

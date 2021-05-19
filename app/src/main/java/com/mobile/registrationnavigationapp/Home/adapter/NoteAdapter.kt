@@ -11,12 +11,12 @@ import kotlinx.android.synthetic.main.item_note.view.*
 
 class NoteAdapter(
     private val data: List<Notes>?,
-    private val itemClick : OnClickListener
-    )
-    : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+    private val itemClick: OnClickListener
+) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+
         return ViewHolder(view, itemClick)
     }
 
@@ -30,12 +30,21 @@ class NoteAdapter(
         return data?.size ?: 0
     }
 
-    class ViewHolder(val view: View,
-        val itemClick: OnClickListener)
-        : RecyclerView.ViewHolder(view) {
-        fun bind(item: Notes?){
+    class ViewHolder(
+        val view: View,
+        val itemClick: OnClickListener
+    ) : RecyclerView.ViewHolder(view) {
+        fun bind(item: Notes?) {
             view.tvDate.text = item?.date
             view.tvNote.text = item?.note
+
+            //cek
+            view.cbFavorit.isChecked = item?.favorite == true
+
+
+            view.cbFavorit.setOnClickListener {
+                itemClick.updateFav(item)
+            }
 
             view.btnUpdate.setOnClickListener {
                 itemClick.update(item)
@@ -46,9 +55,10 @@ class NoteAdapter(
         }
     }
 
-    interface OnClickListener{
-        fun update (item: Notes?)
-        fun delete (item: Notes?)
+    interface OnClickListener {
+        fun update(item: Notes?)
+        fun updateFav(item: Notes?)
+        fun delete(item: Notes?)
     }
 
 }

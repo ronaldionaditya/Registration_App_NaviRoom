@@ -16,4 +16,11 @@
         android:name="com.mobile.registrationnavigationapp.Home.NoteFragment"
         android:label="fragment_note"
         tools:layout="@layout/fragment_note" />
+    <fragment
+        android:id="@+id/wishlistFragment"
+        android:name="com.mobile.registrationnavigationapp.Home.WishlistFragment"
+        android:label="fragment_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+
+
 </navigation>

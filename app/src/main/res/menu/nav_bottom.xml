@@ -9,5 +9,10 @@
         android:id="@+id/noteFragment"
         android:icon="@drawable/ic_notes"
         android:title="Note" />
+    <item
+        android:id="@+id/wishlistFragment"
+        android:icon="@drawable/wishlist_item"
+        android:title="Wishlist"
+        />
 
 </menu>
